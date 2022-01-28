@@ -21,7 +21,12 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
-    var tarihList = this.widget.movie.releaseDate.split("-");
+    var tarih;
+    try {
+      tarih = this.widget.movie.releaseDate.split("-")[0];
+    } catch (e) {
+      tarih = "null";
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       bottomNavigationBar: BottomAppBar(
@@ -85,7 +90,7 @@ class _DetailsState extends State<Details> {
                     ]),
               ])),
           Center(
-              child: Text(widget.movie.title + " (${tarihList[0]})",
+              child: Text(widget.movie.title + " (${tarih})",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
           Padding(
               padding: EdgeInsets.all(20),
@@ -104,64 +109,72 @@ class _DetailsState extends State<Details> {
         ),
         child: IconButton(
             onPressed: () async {
+              print("index :$index");
               var sharedPreferences = await SharedPreferences.getInstance();
               var favorites = sharedPreferences.getStringList("favorites");
               var list = sharedPreferences.getStringList("list");
               var movie = widget.movie.id.toString();
-              bool liste = false;
-              bool favorite = false;
-              for (var i in list!) {
-                if (i == movie) {
-                  liste = true;
-                }
-              }
-              for (var x in favorites!) {
-                if (x == movie) {
-                  favorite = true;
-                }
-              }
-              if (!liste && !favorite) {
-                if (index == 0) {
+
+              bool listeicindemi = icindeMi(movie, list!);
+              bool favoricindemi = icindeMi(movie, favorites!);
+              if (index == 0) {
+                if (!listeicindemi) {
                   print("listeye ekleniyor");
                   list.add(widget.movie.id.toString());
                   print(list);
                   sharedPreferences.setStringList("list", list);
                   final snackBar = SnackBar(
+                    duration: Duration(seconds: 2),
                     content: const Text('İzleme Listesine Eklendi'),
                     backgroundColor: (Colors.black12),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } else if (index == 1) {
-                  print("favorite ekleniyor");
-                  favorites.add(widget.movie.id.toString());
-                  sharedPreferences.setStringList("favorites", favorites);
+                } else {
+                  list.remove(widget.movie.id.toString());
+                  sharedPreferences.setStringList("list", list);
+                  listeicindemi = false;
                   final snackBar = SnackBar(
-                    content: const Text('Favorilerinize eklendi'),
+                    duration: Duration(seconds: 2),
+                    content: const Text('izleme listenizden çıkarıldı'),
                     backgroundColor: (Colors.black12),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
               }
-              if (liste) {
-                list.remove(widget.movie.id.toString());
-                sharedPreferences.setStringList("list", list);
-
-                final snackBar = SnackBar(
-                  content: const Text('izleme listenizden çıkarıldı'),
-                  backgroundColor: (Colors.black12),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-              if (favorite) {
-                favorites.remove(widget.movie.id.toString());
-                sharedPreferences.setStringList("favorites", favorites);
-                final snackBar = SnackBar(
-                  content: const Text('favorilerinizden çıkarıldı'),
-                  backgroundColor: (Colors.black12),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              if (index == 1) {
+                if (!favoricindemi) {
+                  print("favorite ekleniyor");
+                  favorites.add(widget.movie.id.toString());
+                  sharedPreferences.setStringList("favorites", favorites);
+                  final snackBar = SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: const Text('Favorilerinize eklendi'),
+                    backgroundColor: (Colors.black12),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                } else {
+                  favorites.remove(widget.movie.id.toString());
+                  sharedPreferences.setStringList("favorites", favorites);
+                  favoricindemi = false;
+                  final snackBar = SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: const Text('favorilerinizden çıkarıldı'),
+                    backgroundColor: (Colors.black12),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               }
             },
             icon: icon));
+  }
+
+  icindeMi(String str, List list) {
+    bool icinde = false;
+    for (var i in list) {
+      if (i == str) {
+        icinde = true;
+      }
+    }
+    return icinde;
   }
 }
