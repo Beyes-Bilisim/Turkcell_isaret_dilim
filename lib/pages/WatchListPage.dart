@@ -46,8 +46,9 @@ class _WatchListPageState extends State<WatchListPage> {
                     itemBuilder: (context, index) {
                       return MovieCard(
                         subtitle: (snapshot.data as List)[index]
-                            .releaseDate
-                            .split("-")[0],
+                                .releaseDate
+                                .split("-")[0] ??
+                            "null",
                         image: (snapshot.data as List)[index].posterPath ??
                             (snapshot.data as List)[index].backdropPath,
                         movie: (snapshot.data as List)[index],

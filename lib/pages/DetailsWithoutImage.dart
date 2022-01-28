@@ -4,7 +4,7 @@ import 'package:movie_manager/models/Movie.dart';
 
 class DetailsWithOutImage extends StatefulWidget {
   late Movie movie;
-    final int index;
+  final int index;
   final ValueChanged<int> onChangeTab;
   DetailsWithOutImage({
     Key? key,
@@ -20,8 +20,12 @@ class DetailsWithOutImage extends StatefulWidget {
 class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
   @override
   Widget build(BuildContext context) {
-    var tarihList = this.widget.movie.releaseDate.split("-");
-
+    var tarih;
+    try {
+      tarih = this.widget.movie.releaseDate.split("-")[0];
+    } catch (e) {
+      tarih = "null";
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       bottomNavigationBar: BottomAppBar(
@@ -53,7 +57,7 @@ class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
       body: SingleChildScrollView(
           child: Column(children: [
         Center(
-            child: Text(widget.movie.title + " (${tarihList[0]})",
+            child: Text(widget.movie.title + " (${tarih})",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
         Padding(
             padding: EdgeInsets.all(20),
@@ -61,6 +65,7 @@ class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
       ])),
     );
   }
+
   Widget BuildTabItem({required int index, required Icon icon}) {
     final isSelected = index == widget.index;
     return IconTheme(
@@ -68,13 +73,74 @@ class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
           color: Colors.blue,
         ),
         child: IconButton(
-            onPressed: () {
-              if (index == 0) {
-                print("listeye ekleniyor");
-              } else if (index == 1) {
-                print("favorite ekleniyor");
+            onPressed: () async {
+              print("index :$index");
+              var sharedPreferences = await SharedPreferences.getInstance();
+              var favorites = sharedPreferences.getStringList("favorites");
+              var list = sharedPreferences.getStringList("list");
+              var movie = widget.movie.id.toString();
+
+              bool listeicindemi = icindeMi(movie, list!);
+              bool favoricindemi = icindeMi(movie, favorites!);
+              if (!listeicindemi && !favoricindemi) {
+                if (index == 0) {
+                  print("listeye ekleniyor");
+                  list.add(widget.movie.id.toString());
+                  print(list);
+                  sharedPreferences.setStringList("list", list);
+                  final snackBar = SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: const Text('İzleme Listesine Eklendi'),
+                    backgroundColor: (Colors.black12),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+                if (index == 1) {
+                  print("favorite ekleniyor");
+                  favorites.add(widget.movie.id.toString());
+                  sharedPreferences.setStringList("favorites", favorites);
+                  final snackBar = SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: const Text('Favorilerinize eklendi'),
+                    backgroundColor: (Colors.black12),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              } else {
+                if (listeicindemi) {
+                  list.remove(widget.movie.id.toString());
+                  sharedPreferences.setStringList("list", list);
+                  listeicindemi = false;
+                  final snackBar = SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: const Text('izleme listenizden çıkarıldı'),
+                    backgroundColor: (Colors.black12),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+                if (favoricindemi) {
+                  favorites.remove(widget.movie.id.toString());
+                  sharedPreferences.setStringList("favorites", favorites);
+                  favoricindemi = false;
+                  final snackBar = SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: const Text('favorilerinizden çıkarıldı'),
+                    backgroundColor: (Colors.black12),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               }
             },
             icon: icon));
+  }
+
+  icindeMi(String str, List list) {
+    bool icinde = false;
+    for (var i in list) {
+      if (i == str) {
+        icinde = true;
+      }
+    }
+    return icinde;
   }
 }

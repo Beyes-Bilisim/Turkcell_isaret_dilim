@@ -49,7 +49,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       return MovieCard(
                         subtitle: (snapshot.data as List)[index]
                             .releaseDate
-                            .split("-")[0],
+                            .split("-")[0] ?? "null",
                         image: (snapshot.data as List)[index].posterPath ??
                             (snapshot.data as List)[index].backdropPath, movie: (snapshot.data as List)[index],
                       );
