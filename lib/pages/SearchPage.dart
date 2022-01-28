@@ -49,6 +49,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   MovieApi api = MovieApi();
+  int index = 0;
   TextEditingController _search = TextEditingController();
   List<Movie> movies = [];
   String query = '';
@@ -106,6 +107,8 @@ class _SearchState extends State<Search> {
                         MaterialPageRoute(
                           builder: (context) => DetailsWithOutImage(
                             movie: movies[index],
+                            index: index,
+                            onChangeTab: onChangeTab,
                           ),
                         ));
                   } else {
@@ -114,6 +117,8 @@ class _SearchState extends State<Search> {
                         MaterialPageRoute(
                           builder: (context) => Details(
                             movie: movies[index],
+                            index: index,
+                            onChangeTab: onChangeTab,
                           ),
                         ));
                   }
@@ -125,5 +130,12 @@ class _SearchState extends State<Search> {
         ],
       ),
     );
+  }
+
+  void onChangeTab(int value) {
+    setState(() {
+      print(index);
+      index = value;
+    });
   }
 }

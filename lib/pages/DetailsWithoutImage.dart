@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:movie_manager/models/Movie.dart';
 
 class DetailsWithOutImage extends StatefulWidget {
   late Movie movie;
+    final int index;
+  final ValueChanged<int> onChangeTab;
   DetailsWithOutImage({
     Key? key,
     required this.movie,
+    required this.index,
+    required this.onChangeTab,
   }) : super(key: key);
 
   @override
@@ -20,6 +24,15 @@ class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            BuildTabItem(index: 0, icon: Icon(Icons.format_list_bulleted)),
+            BuildTabItem(index: 1, icon: Icon(Icons.favorite)),
+          ],
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -47,5 +60,21 @@ class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
             child: Text(widget.movie.overview, style: TextStyle(fontSize: 18)))
       ])),
     );
+  }
+  Widget BuildTabItem({required int index, required Icon icon}) {
+    final isSelected = index == widget.index;
+    return IconTheme(
+        data: IconThemeData(
+          color: Colors.blue,
+        ),
+        child: IconButton(
+            onPressed: () {
+              if (index == 0) {
+                print("listeye ekleniyor");
+              } else if (index == 1) {
+                print("favorite ekleniyor");
+              }
+            },
+            icon: icon));
   }
 }

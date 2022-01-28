@@ -3,6 +3,7 @@ import 'package:movie_manager/pages/FavoritesPage.dart';
 import 'package:movie_manager/pages/SearchPage.dart';
 import 'package:movie_manager/pages/WatchListPage.dart';
 import 'package:movie_manager/widgets/TabBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 void main() {
@@ -55,6 +56,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int index = 0;
   final pages = [SearchPage(), WatchListPage(), FavoritesPage()];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,5 +80,17 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       this.index = value;
     });
+  }
+
+  void init() async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    var favorites = sharedPreferences.getStringList("favorites") ?? null;
+    var list = sharedPreferences.getStringList("list") ?? null;
+    if (favorites == null) {
+      sharedPreferences.setStringList("favorites", []);
+    }
+    if (list == null) {
+      sharedPreferences.setStringList("list", []);
+    }
   }
 }

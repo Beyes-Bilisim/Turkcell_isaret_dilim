@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_manager/api/MovieApi.dart';
+import 'package:movie_manager/models/Movie.dart';
+import 'package:movie_manager/widgets/MovieCard.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
@@ -8,6 +11,8 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  MovieApi api = MovieApi();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +33,37 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   end: Alignment.topCenter)),
         ),
       ),
-      body: Center(child: Text("favorits")),
+      body: Container(
+        margin: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            FutureBuilder(
+              future: api.getFavorites(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: (snapshot.data as List).length,
+                    itemBuilder: (context, index) {
+                      return MovieCard(
+                        subtitle: (snapshot.data as List)[index]
+                            .releaseDate
+                            .split("-")[0],
+                        image: (snapshot.data as List)[index].posterPath ??
+                            (snapshot.data as List)[index].backdropPath, movie: (snapshot.data as List)[index],
+                      );
+                    },
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }
