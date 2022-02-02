@@ -27,6 +27,10 @@ dependencies:
   http: any
   shared_preferences: any
   connectivity_plus: any
+  firebase_core: any
+  firebase_auth: any
+  the_validator: any
+  email_validator: any 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

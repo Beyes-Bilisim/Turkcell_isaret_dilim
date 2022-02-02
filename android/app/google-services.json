@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "621507506372",
+    "project_id": "movie-manager-13ca7",
+    "storage_bucket": "movie-manager-13ca7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621507506372:android:237bf235552dd08b759991",
+        "android_client_info": {
+          "package_name": "com.example.movie_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621507506372-bovfbqibtld0duk9q51dsroa14fhv4h7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFD38KYg_dh2PUAnEJDjuqiFxp6ihYuXk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621507506372-bovfbqibtld0duk9q51dsroa14fhv4h7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

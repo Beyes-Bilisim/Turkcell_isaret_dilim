@@ -1,12 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/pages/FavoritesPage.dart';
 import 'package:movie_manager/pages/SearchPage.dart';
 import 'package:movie_manager/pages/WatchListPage.dart';
+import 'package:movie_manager/utils/auth/AuthController.dart';
 import 'package:movie_manager/widgets/TabBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(new MaterialApp(
       debugShowCheckedModeBanner: false, home: WelcomeScreen()));
 }
@@ -18,7 +22,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SplashScreen(
       seconds: 3,
-      navigateAfterSeconds: MyApp(),
+      navigateAfterSeconds: AuthController(),
       title: Text(
         'Welcome',
         style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
