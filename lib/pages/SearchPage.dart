@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/api/MovieApi.dart';
 import 'package:movie_manager/models/Movie.dart';
 import 'package:movie_manager/pages/Details.dart';
 import 'package:movie_manager/pages/DetailsWithoutImage.dart';
+import 'package:movie_manager/pages/Login.dart';
 import 'package:movie_manager/widgets/MovieCard.dart';
 
 class SearchPage extends StatefulWidget {
@@ -15,6 +17,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +37,38 @@ class _SearchPageState extends State<SearchPage> {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter)),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+            child: IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text("Çıkış Yap"),
+                    content: Text("Çıkış yapmak istediğinize emin misiniz?"),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            _auth.signOut();
+                            WidgetsBinding.instance!
+                                .addPostFrameCallback((timeStamp) {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login()),
+                                  (r) => false);
+                            });
+                          },
+                          child: Text("EVET")),
+                    ],
+                  ),
+                );
+              },
+            ),
+          )
+        ],
       ),
       body: Search(),
     );

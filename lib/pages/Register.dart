@@ -169,16 +169,17 @@ class _RegisterState extends State<Register> {
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           formKey.currentState!.reset();
-          _firebaseUser.user!.sendEmailVerification()
-          .then((value)=>null)
-          .catchError((onError) => null);
-        }else{
+          _firebaseUser.user!
+              .sendEmailVerification()
+              .then((value) => null)
+              .catchError((onError) => null);
+        } else {
           final snackBar = SnackBar(
-          duration: Duration(seconds: 3),
-          content: const Text('Kayıtlı bir E-posta adresi ile girdiniz'),
-          backgroundColor: (Colors.black45),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            duration: Duration(seconds: 3),
+            content: const Text('Kayıtlı bir E-posta adresi ile girdiniz'),
+            backgroundColor: (Colors.black45),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       }
     }

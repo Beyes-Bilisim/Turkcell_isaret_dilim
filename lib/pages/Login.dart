@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/main.dart';
 import 'package:movie_manager/pages/Register.dart';
+import 'package:movie_manager/pages/ResetPassword.dart';
 import 'package:the_validator/the_validator.dart';
 
 class Login extends StatefulWidget {
@@ -127,12 +128,13 @@ class _LoginState extends State<Login> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MyApp()));
+                                    builder: (context) => ResetPassword()));
                           },
                         ),
                       ],
                     ),
                   ),
+                  SizedBox(height: 20),
                   Container(
                       height: 50,
                       width: MediaQuery.of(context).size.width - 150,
@@ -156,25 +158,27 @@ class _LoginState extends State<Login> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       try {
-         await _auth
-          .signInWithEmailAndPassword(email: _email, password: _sifre)
-          .then((user) {
-        if (user.user!.emailVerified == false) {
-          _auth.signOut();
-          final snackBar = SnackBar(
-            duration: Duration(seconds: 3),
-            content: const Text('Lütfen E-postanızı doğrulayın'),
-            backgroundColor: (Colors.black45),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        } else {
-          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (context) => MyApp()), (r) => false);
-          });
-          formKey.currentState!.reset();
-        }
-      });
+        await _auth
+            .signInWithEmailAndPassword(email: _email, password: _sifre)
+            .then((user) {
+          if (user.user!.emailVerified == false) {
+            _auth.signOut();
+            final snackBar = SnackBar(
+              duration: Duration(seconds: 3),
+              content: const Text('Lütfen E-postanızı doğrulayın'),
+              backgroundColor: (Colors.black45),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                  (r) => false);
+            });
+            formKey.currentState!.reset();
+          }
+        });
       } catch (e) {
         final snackBar = SnackBar(
           duration: Duration(seconds: 3),
@@ -183,7 +187,6 @@ class _LoginState extends State<Login> {
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-     
     }
   }
 }
