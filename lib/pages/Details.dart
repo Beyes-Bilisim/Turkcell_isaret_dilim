@@ -88,8 +88,6 @@ class _DetailsState extends State<Details> {
                           ),
                         ],
                       ),
-                      // Text("${tarih}",
-                      //     style: TextStyle(fontSize: 18, color: Colors.white)),
                     ]),
               ])),
           Center(

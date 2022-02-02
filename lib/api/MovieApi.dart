@@ -51,7 +51,7 @@ class MovieApi {
         if (response.statusCode == 200) {
           movies.add(movieFromJson(response.body));
         } else {
-          print("BİŞEYLER YANLIŞ MORUK");
+          print("hata");
         }
       }
       return movies;
@@ -81,7 +81,7 @@ class MovieApi {
         if (response.statusCode == 200) {
           movies.add(movieFromJson(response.body));
         } else {
-          print("BİŞEYLER YANLIŞ MORUK");
+          print("hata");
         }
       }
       return movies;
