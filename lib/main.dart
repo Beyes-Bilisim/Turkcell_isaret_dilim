@@ -85,12 +85,21 @@ class _HomePageState extends State<HomePage> {
   void init() async {
     var sharedPreferences = await SharedPreferences.getInstance();
     var favorites = sharedPreferences.getStringList("favorites") ?? null;
+    var favorites_offline =
+        sharedPreferences.getStringList("favorites_offline") ?? null;
     var list = sharedPreferences.getStringList("list") ?? null;
+    var list_offline = sharedPreferences.getStringList("list_offline") ?? null;
     if (favorites == null) {
       sharedPreferences.setStringList("favorites", []);
     }
     if (list == null) {
       sharedPreferences.setStringList("list", []);
+    }
+    if (list_offline == null) {
+      sharedPreferences.setStringList("list_offline", []);
+    }
+    if (favorites_offline == null) {
+      sharedPreferences.setStringList("favorites_offline", []);
     }
   }
 }

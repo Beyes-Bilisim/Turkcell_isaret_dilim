@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 import 'package:movie_manager/models/Movie.dart';
@@ -63,11 +64,13 @@ class _DetailsState extends State<Details> {
               height: 300,
               width: 500,
               child: Stack(children: [
-                Image.network((widget.movie.backdropPath != null)
-                    ? "http://image.tmdb.org/t/p/w500/" +
-                        widget.movie.backdropPath
-                    : "http://image.tmdb.org/t/p/w500/" +
-                        widget.movie.posterPath),
+                (widget.movie.backdropPath != null)
+                    ? Image.network("http://image.tmdb.org/t/p/w500/" +
+                        widget.movie.backdropPath)
+                    : (widget.movie.posterPath != null)
+                        ? Image.network("http://image.tmdb.org/t/p/w500/" +
+                            widget.movie.posterPath)
+                        : Text(""),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -109,10 +112,13 @@ class _DetailsState extends State<Details> {
         ),
         child: IconButton(
             onPressed: () async {
-              print("index :$index");
               var sharedPreferences = await SharedPreferences.getInstance();
               var favorites = sharedPreferences.getStringList("favorites");
+              var favorites_offline =
+                  sharedPreferences.getStringList("favorites_offline");
               var list = sharedPreferences.getStringList("list");
+              var list_offline =
+                  sharedPreferences.getStringList("list_offline");
               var movie = widget.movie.id.toString();
 
               bool listeicindemi = icindeMi(movie, list!);
@@ -121,8 +127,9 @@ class _DetailsState extends State<Details> {
                 if (!listeicindemi) {
                   print("listeye ekleniyor");
                   list.add(widget.movie.id.toString());
-                  print(list);
+                  list_offline!.add(movieToJson(widget.movie));
                   sharedPreferences.setStringList("list", list);
+                  sharedPreferences.setStringList("list_offline", list_offline);
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),
                     content: const Text('İzleme Listesine Eklendi'),
@@ -131,7 +138,9 @@ class _DetailsState extends State<Details> {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 } else {
                   list.remove(widget.movie.id.toString());
+                  list_offline!.remove(movieToJson(widget.movie));
                   sharedPreferences.setStringList("list", list);
+                  sharedPreferences.setStringList("list_offline", list_offline);
                   listeicindemi = false;
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),
@@ -145,7 +154,10 @@ class _DetailsState extends State<Details> {
                 if (!favoricindemi) {
                   print("favorite ekleniyor");
                   favorites.add(widget.movie.id.toString());
+                  favorites_offline!.add(movieToJson(widget.movie));
                   sharedPreferences.setStringList("favorites", favorites);
+                  sharedPreferences.setStringList(
+                      "favorites_offline", favorites_offline);
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),
                     content: const Text('Favorilerinize eklendi'),
@@ -154,7 +166,10 @@ class _DetailsState extends State<Details> {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 } else {
                   favorites.remove(widget.movie.id.toString());
+                  favorites_offline!.remove(movieToJson(widget.movie));
                   sharedPreferences.setStringList("favorites", favorites);
+                  sharedPreferences.setStringList(
+                      "favorites_offline", favorites_offline);
                   favoricindemi = false;
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),

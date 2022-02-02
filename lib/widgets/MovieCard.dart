@@ -1,6 +1,8 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/models/Movie.dart';
 import 'package:movie_manager/pages/Details.dart';
+import 'package:movie_manager/pages/DetailsWithoutImage.dart';
 
 class MovieCard extends StatefulWidget {
   late Movie movie;
@@ -14,7 +16,22 @@ class MovieCard extends StatefulWidget {
 }
 
 class _MovieCardState extends State<MovieCard> {
+  ConnectivityResult? _connectivityResult;
+
+  Future<void> _checkConnectivityState() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    setState(() {
+      _connectivityResult = result;
+    });
+  }
+
   int index = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkConnectivityState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,28 +41,45 @@ class _MovieCardState extends State<MovieCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         child: ListTile(
-          leading:
-              Image.network("http://image.tmdb.org/t/p/w500/${widget.image}"),
+          leading: (widget.image == null)
+              ? null
+              : _connectivityResult == ConnectivityResult.none
+                  ? Icon(Icons.wifi_off)
+                  : Image.network(
+                      "http://image.tmdb.org/t/p/w500/${widget.image}"),
           title: Text("${widget.movie.title}",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
           subtitle: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            Text("${widget.subtitle}"),
+            Text(widget.subtitle ?? "null"),
           ]),
         ),
         onTap: () {
-         Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Details(
-                            movie: widget.movie,
-                            index: index,
-                            onChangeTab: onChangeTab,
-                          ),
-                        ));
+          if (_connectivityResult == ConnectivityResult.none) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailsWithOutImage(
+                    movie: widget.movie,
+                    index: index,
+                    onChangeTab: onChangeTab,
+                  ),
+                ));
+          } else {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Details(
+                    movie: widget.movie,
+                    index: index,
+                    onChangeTab: onChangeTab,
+                  ),
+                ));
+          }
         },
       ),
     );
   }
+
   void onChangeTab(int value) {
     setState(() {
       print(index);

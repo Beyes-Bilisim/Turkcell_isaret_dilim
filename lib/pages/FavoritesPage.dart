@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/api/MovieApi.dart';
 import 'package:movie_manager/models/Movie.dart';
@@ -11,7 +12,21 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  ConnectivityResult? _connectivityResult;
+
+  Future<void> _checkConnectivityState() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+    setState(() {
+      _connectivityResult = result;
+    });
+  }
   MovieApi api = MovieApi();
+
+  @override
+  initState() {
+    super.initState();
+    _checkConnectivityState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +51,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
       body: Container(
         margin: EdgeInsets.all(10),
         child: Column(
-          children: [
+          children: [ 
             FutureBuilder(
               future: api.getFavorites(),
               builder: (context, snapshot) {
@@ -48,10 +63,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     itemBuilder: (context, index) {
                       return MovieCard(
                         subtitle: (snapshot.data as List)[index]
-                            .releaseDate
-                            .split("-")[0] ?? "null",
+                                .releaseDate
+                                .split("-")[0] ??
+                            "null",
                         image: (snapshot.data as List)[index].posterPath ??
-                            (snapshot.data as List)[index].backdropPath, movie: (snapshot.data as List)[index],
+                            (snapshot.data as List)[index].backdropPath,
+                        movie: (snapshot.data as List)[index],
                       );
                     },
                   );
