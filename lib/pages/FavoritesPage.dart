@@ -20,6 +20,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
       _connectivityResult = result;
     });
   }
+
   MovieApi api = MovieApi();
 
   @override
@@ -49,38 +50,33 @@ class _FavoritesPageState extends State<FavoritesPage> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(10),
-        child: Column(
-          children: [ 
-            FutureBuilder(
-              future: api.getFavorites(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: (snapshot.data as List).length,
-                    itemBuilder: (context, index) {
-                      return MovieCard(
-                        subtitle: (snapshot.data as List)[index]
-                                .releaseDate
-                                .split("-")[0] ??
-                            "null",
-                        image: (snapshot.data as List)[index].posterPath ??
-                            (snapshot.data as List)[index].backdropPath,
-                        movie: (snapshot.data as List)[index],
-                      );
-                    },
-                  );
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
+          margin: EdgeInsets.all(10),
+          child: FutureBuilder(
+            future: api.getFavorites(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: (snapshot.data as List).length,
+                  itemBuilder: (context, index) {
+                    return MovieCard(
+                      subtitle: (snapshot.data as List)[index]
+                              .releaseDate
+                              .split("-")[0] ??
+                          "null",
+                      image: (snapshot.data as List)[index].posterPath ??
+                          (snapshot.data as List)[index].backdropPath,
+                      movie: (snapshot.data as List)[index],
+                    );
+                  },
                 );
-              },
-            )
-          ],
-        ),
-      ),
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          )),
     );
   }
 }

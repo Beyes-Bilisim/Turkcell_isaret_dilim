@@ -19,7 +19,7 @@ class _WatchListPageState extends State<WatchListPage> {
         elevation: 0.0,
         toolbarHeight: 70,
         centerTitle: true,
-        title: Text('WatchList'),
+        title: Text('Watch List'),
         flexibleSpace: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
@@ -32,38 +32,33 @@ class _WatchListPageState extends State<WatchListPage> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            FutureBuilder(
-              future: api.getWatchList(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: (snapshot.data as List).length,
-                    itemBuilder: (context, index) {
-                      return MovieCard(
-                        subtitle: (snapshot.data as List)[index]
-                                .releaseDate
-                                .split("-")[0] ??
-                            "null",
-                        image: (snapshot.data as List)[index].posterPath ??
-                            (snapshot.data as List)[index].backdropPath,
-                        movie: (snapshot.data as List)[index],
-                      );
-                    },
-                  );
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
+          margin: EdgeInsets.all(10),
+          child: FutureBuilder(
+            future: api.getWatchList(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: (snapshot.data as List).length,
+                  itemBuilder: (context, index) {
+                    return MovieCard(
+                      subtitle: (snapshot.data as List)[index]
+                              .releaseDate
+                              .split("-")[0] ??
+                          "null",
+                      image: (snapshot.data as List)[index].posterPath ??
+                          (snapshot.data as List)[index].backdropPath,
+                      movie: (snapshot.data as List)[index],
+                    );
+                  },
                 );
-              },
-            )
-          ],
-        ),
-      ),
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          )),
     );
   }
 }
