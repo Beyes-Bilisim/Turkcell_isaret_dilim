@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_manager/utils/texts/Texts.dart';
 import 'package:the_validator/the_validator.dart';
 
 class Register extends StatefulWidget {
@@ -24,7 +25,7 @@ class _RegisterState extends State<Register> {
           elevation: 0.0,
           toolbarHeight: 70,
           centerTitle: true,
-          title: Text("Register"),
+          title: Text(Texts.register_page_title),
           flexibleSpace: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -53,10 +54,10 @@ class _RegisterState extends State<Register> {
                       autofocus: false,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Doldurulması Zorunludur";
+                          return Texts.required_to_be_filled;
                         } else {
                           if (EmailValidator.validate(value) != true) {
-                            return "Geçerli Bir E-posta giriniz";
+                            return Texts.enter_a_valid_email;
                           } else {
                             return null;
                           }
@@ -66,7 +67,7 @@ class _RegisterState extends State<Register> {
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.email),
                           errorStyle: TextStyle(fontSize: 15),
-                          labelText: "Email",
+                          labelText: Texts.email_label_text,
                           labelStyle: TextStyle(fontSize: 20),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
@@ -83,16 +84,16 @@ class _RegisterState extends State<Register> {
                         minLength: 8,
                         shouldContainNumber: true,
                         errorMessage:
-                            "Minimum 8 Karakter uzunluğunda Olmalıdır!",
+                            Texts.must_be_8_characters,
                         onNumberNotPresent: () {
-                          return "Rakam İçermelidir!";
+                          return Texts.must_contain_number;
                         },
                       ),
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
                           errorStyle: TextStyle(fontSize: 15),
-                          labelText: "Password",
+                          labelText: Texts.password_label_text,
                           labelStyle: TextStyle(fontSize: 20),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
@@ -109,16 +110,16 @@ class _RegisterState extends State<Register> {
                         minLength: 8,
                         shouldContainNumber: true,
                         errorMessage:
-                            "Minimum 8 Karakter uzunluğunda Olmalıdır!",
+                            Texts.must_be_8_characters,
                         onNumberNotPresent: () {
-                          return "Rakam İçermelidir!";
+                          return Texts.must_contain_number;
                         },
                       ),
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock),
                           errorStyle: TextStyle(fontSize: 15),
-                          labelText: "Password confirm",
+                          labelText: Texts.password_confirm_label_text,
                           labelStyle: TextStyle(fontSize: 20),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
@@ -132,7 +133,7 @@ class _RegisterState extends State<Register> {
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: ElevatedButton(
                           child:
-                              Text('Register!', style: TextStyle(fontSize: 20)),
+                              Text(Texts.register_button_text, style: TextStyle(fontSize: 20)),
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
@@ -153,7 +154,7 @@ class _RegisterState extends State<Register> {
       if (_sifre != _sifreConfirm) {
         final snackBar = SnackBar(
           duration: Duration(seconds: 3),
-          content: const Text('Şifreler Uyuşmuyor'),
+          content:  Text(Texts.password_do_not_match),
           backgroundColor: (Colors.black45),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -164,7 +165,7 @@ class _RegisterState extends State<Register> {
         if (_firebaseUser != null) {
           final snackBar = SnackBar(
             duration: Duration(seconds: 3),
-            content: const Text('Kayıt Oldunuz Lütfen E-postanızı Doğrulayın'),
+            content:  Text(Texts.please_verify_email),
             backgroundColor: (Colors.black45),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -176,7 +177,7 @@ class _RegisterState extends State<Register> {
         } else {
           final snackBar = SnackBar(
             duration: Duration(seconds: 3),
-            content: const Text('Kayıtlı bir E-posta adresi ile girdiniz'),
+            content:  Text(Texts.entered_with_a_registered_email),
             backgroundColor: (Colors.black45),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);

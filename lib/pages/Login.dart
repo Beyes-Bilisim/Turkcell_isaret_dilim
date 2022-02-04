@@ -1,10 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/main.dart';
 import 'package:movie_manager/pages/Register.dart';
 import 'package:movie_manager/pages/ResetPassword.dart';
+import 'package:movie_manager/utils/texts/Texts.dart';
 import 'package:the_validator/the_validator.dart';
 
 class Login extends StatefulWidget {
@@ -27,7 +27,7 @@ class _LoginState extends State<Login> {
           elevation: 0.0,
           toolbarHeight: 70,
           centerTitle: true,
-          title: Text("Login"),
+          title: Text(Texts.login_page_title),
           flexibleSpace: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -55,10 +55,10 @@ class _LoginState extends State<Login> {
                     autofocus: false,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Doldurulması Zorunludur";
+                        return Texts.required_to_be_filled;
                       } else {
                         if (EmailValidator.validate(value) != true) {
-                          return "Geçerli Bir E-posta giriniz";
+                          return Texts.enter_a_valid_email;
                         } else {
                           return null;
                         }
@@ -68,7 +68,7 @@ class _LoginState extends State<Login> {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email),
                         errorStyle: TextStyle(fontSize: 15),
-                        labelText: "Email",
+                        labelText: Texts.email_label_text,
                         labelStyle: TextStyle(fontSize: 20),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -84,16 +84,16 @@ class _LoginState extends State<Login> {
                     validator: FieldValidator.password(
                       minLength: 8,
                       shouldContainNumber: true,
-                      errorMessage: "Minimum 8 Karakter uzunluğunda Olmalıdır!",
+                      errorMessage: Texts.must_be_8_characters,
                       onNumberNotPresent: () {
-                        return "Rakam İçermelidir!";
+                        return Texts.must_contain_number;
                       },
                     ),
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock),
                         errorStyle: TextStyle(fontSize: 15),
-                        labelText: "Password",
+                        labelText: Texts.password_label_text,
                         labelStyle: TextStyle(fontSize: 20),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -108,7 +108,7 @@ class _LoginState extends State<Login> {
                         FlatButton(
                           textColor: Colors.blue,
                           child: Text(
-                            'Register',
+                            Texts.register_button_text,
                             style: TextStyle(fontSize: 15),
                           ),
                           onPressed: () {
@@ -121,7 +121,7 @@ class _LoginState extends State<Login> {
                         FlatButton(
                           textColor: Colors.blue,
                           child: Text(
-                            'Reset Password',
+                            Texts.reset_password_button_text,
                             style: TextStyle(fontSize: 15),
                           ),
                           onPressed: () {
@@ -141,7 +141,7 @@ class _LoginState extends State<Login> {
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: ElevatedButton(
                         child:
-                            Text('Giriş Yap', style: TextStyle(fontSize: 20)),
+                            Text(Texts.login_button_text, style: TextStyle(fontSize: 20)),
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
@@ -165,7 +165,7 @@ class _LoginState extends State<Login> {
             _auth.signOut();
             final snackBar = SnackBar(
               duration: Duration(seconds: 3),
-              content: const Text('Lütfen E-postanızı doğrulayın'),
+              content:  Text(Texts.please_verify_email),
               backgroundColor: (Colors.black45),
             );
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
       } catch (e) {
         final snackBar = SnackBar(
           duration: Duration(seconds: 3),
-          content: const Text('Yanlış Şifre'),
+          content: Text(Texts.wrong_password),
           backgroundColor: (Colors.black45),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

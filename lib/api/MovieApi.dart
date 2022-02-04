@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:movie_manager/api/api.dart';
+import 'package:movie_manager/api/Api.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:movie_manager/models/Movie.dart';
 import "package:http/http.dart" as http;
@@ -13,9 +13,7 @@ class MovieApi {
               query);
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        print("query : $query");
         var obj = json.decode(response.body);
-
         List<Movie> movies =
             (obj["results"] as List).map((e) => Movie.fromJson(e)).toList();
         return movies;
@@ -35,7 +33,6 @@ class MovieApi {
       List<Movie> movies = [];
       var favorites_offline =
           sharedPreferences.getStringList("favorites_offline");
-      print("Strgin favorites list : $favorites_offline");
       for (var i in favorites_offline!) {
         movies.add(movieFromJson(i));
       }
@@ -43,7 +40,6 @@ class MovieApi {
     } else {
       var favorites = sharedPreferences.getStringList("favorites");
       List<Movie> movies = [];
-      print(favorites);
       for (String i in favorites!) {
         final url = Uri.parse(
             "${Api.movieUrl}$i?api_key=${Api.apiKey}&language=${Api.language}");
@@ -64,7 +60,6 @@ class MovieApi {
     if (connection == ConnectivityResult.none) {
       List<Movie> movies = [];
       var list_offline = sharedPreferences.getStringList("list_offline");
-      print("Strgin watch list  : $list_offline");
 
       for (var i in list_offline!) {
         movies.add(movieFromJson(i));
@@ -73,7 +68,6 @@ class MovieApi {
     } else {
       var favorites = sharedPreferences.getStringList("list");
       List<Movie> movies = [];
-      // print(favorites);
       for (String i in favorites!) {
         final url = Uri.parse(
             "${Api.movieUrl}$i?api_key=${Api.apiKey}&language=${Api.language}");

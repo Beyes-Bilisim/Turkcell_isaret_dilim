@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/api/MovieApi.dart';
@@ -7,7 +5,7 @@ import 'package:movie_manager/models/Movie.dart';
 import 'package:movie_manager/pages/Details.dart';
 import 'package:movie_manager/pages/DetailsWithoutImage.dart';
 import 'package:movie_manager/pages/Login.dart';
-import 'package:movie_manager/widgets/MovieCard.dart';
+import 'package:movie_manager/utils/texts/Texts.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -26,7 +24,7 @@ class _SearchPageState extends State<SearchPage> {
         elevation: 0.0,
         toolbarHeight: 70,
         centerTitle: true,
-        title: Text('Search'),
+        title: Text(Texts.search_page_title),
         flexibleSpace: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
@@ -46,8 +44,8 @@ class _SearchPageState extends State<SearchPage> {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text("Çıkış Yap"),
-                    content: Text("Çıkış yapmak istediğinize emin misiniz?"),
+                    title: Text(Texts.logout),
+                    content: Text(Texts.logout_question),
                     actions: [
                       TextButton(
                           onPressed: () {
@@ -61,7 +59,7 @@ class _SearchPageState extends State<SearchPage> {
                                   (r) => false);
                             });
                           },
-                          child: Text("EVET")),
+                          child: Text(Texts.logout_yes)),
                     ],
                   ),
                 );
@@ -112,7 +110,7 @@ class _SearchState extends State<Search> {
                       },
                     )
                   : null,
-              hintText: "Search",
+              hintText: Texts.search_label_text,
               hintStyle: style,
               border: InputBorder.none,
             ),
@@ -122,7 +120,6 @@ class _SearchState extends State<Search> {
                 query = text;
                 movies = gelenMovies;
               });
-              // print(movies.length);
             },
           ),
           SizedBox(
@@ -161,7 +158,6 @@ class _SearchState extends State<Search> {
               );
             },
           ))
-          // MovieCard(),
         ],
       ),
     );

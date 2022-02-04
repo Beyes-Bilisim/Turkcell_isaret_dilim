@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_manager/api/MovieApi.dart';
-import 'package:movie_manager/models/Movie.dart';
+import 'package:movie_manager/utils/texts/Texts.dart';
 import 'package:movie_manager/widgets/MovieCard.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -37,7 +37,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         elevation: 0.0,
         toolbarHeight: 70,
         centerTitle: true,
-        title: Text('Favorites'),
+        title: Text(Texts.favorites_page_title),
         flexibleSpace: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(

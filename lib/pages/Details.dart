@@ -1,7 +1,7 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-
+import 'package:movie_manager/api/Api.dart';
 import 'package:movie_manager/models/Movie.dart';
+import 'package:movie_manager/utils/texts/Texts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Details extends StatefulWidget {
@@ -65,10 +65,10 @@ class _DetailsState extends State<Details> {
               width: 500,
               child: Stack(children: [
                 (widget.movie.backdropPath != null)
-                    ? Image.network("http://image.tmdb.org/t/p/w500/" +
+                    ? Image.network(Api.imageUrl +
                         widget.movie.backdropPath)
                     : (widget.movie.posterPath != null)
-                        ? Image.network("http://image.tmdb.org/t/p/w500/" +
+                        ? Image.network(Api.imageUrl +
                             widget.movie.posterPath)
                         : Text(""),
                 Row(
@@ -123,14 +123,13 @@ class _DetailsState extends State<Details> {
               bool favoricindemi = icindeMi(movie, favorites!);
               if (index == 0) {
                 if (!listeicindemi) {
-                  print("listeye ekleniyor");
                   list.add(widget.movie.id.toString());
                   list_offline!.add(movieToJson(widget.movie));
                   sharedPreferences.setStringList("list", list);
                   sharedPreferences.setStringList("list_offline", list_offline);
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),
-                    content: const Text('İzleme Listesine Eklendi'),
+                    content:  Text(Texts.added_to_watch_list),
                     backgroundColor: (Colors.black12),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -142,7 +141,7 @@ class _DetailsState extends State<Details> {
                   listeicindemi = false;
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),
-                    content: const Text('izleme listenizden çıkarıldı'),
+                    content:  Text(Texts.removed_from_watch_list),
                     backgroundColor: (Colors.black12),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -150,7 +149,6 @@ class _DetailsState extends State<Details> {
               }
               if (index == 1) {
                 if (!favoricindemi) {
-                  print("favorite ekleniyor");
                   favorites.add(widget.movie.id.toString());
                   favorites_offline!.add(movieToJson(widget.movie));
                   sharedPreferences.setStringList("favorites", favorites);
@@ -158,7 +156,7 @@ class _DetailsState extends State<Details> {
                       "favorites_offline", favorites_offline);
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),
-                    content: const Text('Favorilerinize eklendi'),
+                    content:  Text(Texts.added_to_favorites),
                     backgroundColor: (Colors.black12),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -171,7 +169,7 @@ class _DetailsState extends State<Details> {
                   favoricindemi = false;
                   final snackBar = SnackBar(
                     duration: Duration(seconds: 2),
-                    content: const Text('favorilerinizden çıkarıldı'),
+                    content:  Text(Texts.removed_from_favorites),
                     backgroundColor: (Colors.black12),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

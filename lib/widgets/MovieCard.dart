@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_manager/api/Api.dart';
 import 'package:movie_manager/models/Movie.dart';
 import 'package:movie_manager/pages/Details.dart';
 import 'package:movie_manager/pages/DetailsWithoutImage.dart';
@@ -46,7 +47,7 @@ class _MovieCardState extends State<MovieCard> {
               : _connectivityResult == ConnectivityResult.none
                   ? Icon(Icons.wifi_off)
                   : Image.network(
-                      "http://image.tmdb.org/t/p/w500/${widget.image}"),
+                      "${Api.imageUrl}${widget.image}"),
           title: Text("${widget.movie.title}",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
           subtitle: Row(mainAxisAlignment: MainAxisAlignment.end, children: [

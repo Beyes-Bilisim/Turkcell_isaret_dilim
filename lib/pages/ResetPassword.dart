@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_manager/utils/texts/Texts.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           elevation: 0.0,
           toolbarHeight: 70,
           centerTitle: true,
-          title: Text("Reset Password"),
+          title: Text(Texts.reset_password_page_title),
           flexibleSpace: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -52,10 +53,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                           autofocus: false,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Doldurulması Zorunludur";
+                              return Texts.required_to_be_filled;
                             } else {
                               if (EmailValidator.validate(value) != true) {
-                                return "Geçerli Bir E-posta giriniz";
+                                return Texts.enter_a_valid_email;
                               } else {
                                 return null;
                               }
@@ -65,7 +66,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                           decoration: InputDecoration(
                               prefixIcon: Icon(Icons.email),
                               errorStyle: TextStyle(fontSize: 15),
-                              labelText: "Email",
+                              labelText: Texts.email_label_text,
                               labelStyle: TextStyle(fontSize: 20),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5),
@@ -78,7 +79,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             width: MediaQuery.of(context).size.width - 150,
                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ElevatedButton(
-                              child: Text('Reset Password!',
+                              child: Text(Texts.reset_password_button_text,
                                   style: TextStyle(fontSize: 20)),
                               style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
@@ -102,7 +103,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         await _auth.sendPasswordResetEmail(email: _email);
         final snackBar = SnackBar(
           duration: Duration(seconds: 3),
-          content: const Text('E-postanızı kontrol ediniz'),
+          content: Text(Texts.check_your_email),
           backgroundColor: (Colors.black45),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -110,7 +111,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       } catch (e) {
         final snackBar = SnackBar(
           duration: Duration(seconds: 3),
-          content: const Text('Böyle bir kullanıcı bulunmuyor'),
+          content: Text(Texts.no_users),
           backgroundColor: (Colors.black45),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
