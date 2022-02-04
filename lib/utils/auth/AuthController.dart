@@ -14,35 +14,38 @@ class _AuthControllerState extends State<AuthController> {
   AuthService _service = AuthService();
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _service.userCheck(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data as bool;
-          if (data) {
-            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyApp(),
-                  ),
-                  (r) => false);
-            });
-          } else {
-            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Login(),
-                  ),
-                  (r) => false);
-            });
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: FutureBuilder(
+        future: _service.userCheck(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final data = snapshot.data as bool;
+            if (data) {
+              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyApp(),
+                    ),
+                    (r) => false);
+              });
+            } else {
+              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Login(),
+                    ),
+                    (r) => false);
+              });
+            }
           }
-        }
-        return Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-      },
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        },
+      )
     );
   }
 }

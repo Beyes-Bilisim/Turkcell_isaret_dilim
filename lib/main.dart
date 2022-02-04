@@ -6,32 +6,13 @@ import 'package:movie_manager/pages/WatchListPage.dart';
 import 'package:movie_manager/utils/auth/AuthController.dart';
 import 'package:movie_manager/widgets/TabBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:splashscreen/splashscreen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(new MaterialApp(
-      debugShowCheckedModeBanner: false, home: WelcomeScreen()));
+  runApp(AuthController());
 }
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SplashScreen(
-      seconds: 3,
-      navigateAfterSeconds: AuthController(),
-      title: Text(
-        'Welcome',
-        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
-      ),
-      backgroundColor: Colors.white,
-      loaderColor: Colors.red,
-    );
-  }
-}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
