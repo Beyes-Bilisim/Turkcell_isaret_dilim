@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:movie_manager/api/api.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:movie_manager/models/Movie.dart';
 import "package:http/http.dart" as http;
@@ -9,7 +9,7 @@ class MovieApi {
   Future<List<Movie>> getMovies(String query) async {
     try {
       final url = Uri.parse(
-          "https://api.themoviedb.org/3/search/movie?api_key=260aea4b58c5eabb859359bb5581fdb7&language=tr&query=" +
+          "${Api.searchMovieUrl}?api_key=${Api.apiKey}&language=${Api.language}&query=" +
               query);
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -46,7 +46,7 @@ class MovieApi {
       print(favorites);
       for (String i in favorites!) {
         final url = Uri.parse(
-            "https://api.themoviedb.org/3/movie/$i?api_key=260aea4b58c5eabb859359bb5581fdb7&language=tr");
+            "${Api.movieUrl}$i?api_key=${Api.apiKey}&language=${Api.language}");
         final response = await http.get(url);
         if (response.statusCode == 200) {
           movies.add(movieFromJson(response.body));
@@ -76,7 +76,7 @@ class MovieApi {
       // print(favorites);
       for (String i in favorites!) {
         final url = Uri.parse(
-            "https://api.themoviedb.org/3/movie/$i?api_key=260aea4b58c5eabb859359bb5581fdb7&language=tr");
+            "${Api.movieUrl}$i?api_key=${Api.apiKey}&language=${Api.language}");
         final response = await http.get(url);
         if (response.statusCode == 200) {
           movies.add(movieFromJson(response.body));
