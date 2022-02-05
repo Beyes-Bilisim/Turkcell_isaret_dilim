@@ -31,4 +31,5 @@ class Texts {
   static String logout_question = "Çıkış yapmak istediğinize emin misiniz?";
   static String search_label_text = "Search";
   static String watch_page_title = "Watch List";
+  static String loading = "Yükleniyor";
 }

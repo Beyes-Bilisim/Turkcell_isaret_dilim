@@ -83,9 +83,28 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   MovieApi api = MovieApi();
   int index = 0;
+  var _load = false;
   TextEditingController _search = TextEditingController();
   List<Movie> movies = [];
   String query = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
+  init() async {
+    setState(() {
+      _load = true;
+    });
+    var trendMovies = await api.getTrendMovies();
+    setState(() {
+      movies = trendMovies;
+      _load = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +124,8 @@ class _SearchState extends State<Search> {
                       child: Icon(Icons.close, color: style.color),
                       onTap: () {
                         _search.clear();
-
                         FocusScope.of(context).requestFocus(FocusNode());
+                        init();
                       },
                     )
                   : null,
@@ -115,49 +134,68 @@ class _SearchState extends State<Search> {
               border: InputBorder.none,
             ),
             onChanged: (text) async {
+              var textControl = text.replaceAll(' ', '');
+              if (textControl == '') {
+                init();
+              }
+              setState(() {
+                _load = true;
+              });
               var gelenMovies = await api.getMovies(text);
               setState(() {
                 query = text;
                 movies = gelenMovies;
+                _load = false;
               });
             },
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Divider(),
+              )
+            ],
           ),
           SizedBox(
             height: 20,
           ),
           Expanded(
-              child: ListView.builder(
-            itemCount: (query.isEmpty) ? 0 : movies.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(movies[index].title),
-                onTap: () {
-                  if (movies[index].backdropPath == null &&
-                      movies[index].posterPath == null) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsWithOutImage(
-                            movie: movies[index],
-                            index: index,
-                            onChangeTab: onChangeTab,
-                          ),
-                        ));
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Details(
-                            movie: movies[index],
-                            index: index,
-                            onChangeTab: onChangeTab,
-                          ),
-                        ));
-                  }
-                },
-              );
-            },
-          ))
+              child: _load
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      itemCount: movies.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(movies[index].title),
+                          onTap: () {
+                            if (movies[index].backdropPath == null &&
+                                movies[index].posterPath == null) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailsWithOutImage(
+                                      movie: movies[index],
+                                      index: index,
+                                      onChangeTab: onChangeTab,
+                                    ),
+                                  ));
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Details(
+                                      movie: movies[index],
+                                      index: index,
+                                      onChangeTab: onChangeTab,
+                                    ),
+                                  ));
+                            }
+                          },
+                        );
+                      },
+                    ))
         ],
       ),
     );

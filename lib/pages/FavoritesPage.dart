@@ -32,9 +32,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+
         toolbarHeight: 70,
         centerTitle: true,
         title: Text(Texts.favorites_page_title),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,25 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  showAlertDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 5), child: Text(Texts.loading)),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   var formKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
   late String _email;
@@ -46,6 +67,7 @@ class _LoginState extends State<Login> {
               Form(
                 key: formKey,
                 child: Column(children: [
+                  SizedBox(height: 10),
                   TextFormField(
                     onSaved: (newValue) {
                       setState(() {
@@ -140,8 +162,8 @@ class _LoginState extends State<Login> {
                       width: MediaQuery.of(context).size.width - 150,
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: ElevatedButton(
-                        child:
-                            Text(Texts.login_button_text, style: TextStyle(fontSize: 20)),
+                        child: Text(Texts.login_button_text,
+                            style: TextStyle(fontSize: 20)),
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
@@ -165,18 +187,21 @@ class _LoginState extends State<Login> {
             _auth.signOut();
             final snackBar = SnackBar(
               duration: Duration(seconds: 3),
-              content:  Text(Texts.please_verify_email),
+              content: Text(Texts.please_verify_email),
               backgroundColor: (Colors.black45),
             );
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else {
-            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
-                  (r) => false);
+            showAlertDialog(context);
+            Timer(Duration(seconds: 2), () {
+              formKey.currentState!.reset();
+              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                    (r) => false);
+              });
             });
-            formKey.currentState!.reset();
           }
         });
       } catch (e) {

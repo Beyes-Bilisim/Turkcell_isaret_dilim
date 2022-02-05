@@ -4,4 +4,5 @@ class Api {
   static String searchMovieUrl = "https://api.themoviedb.org/3/search/movie";
   static String movieUrl = "https://api.themoviedb.org/3/movie/";
   static String imageUrl = "http://image.tmdb.org/t/p/w500/";
+  static String popularUrl = "https://api.themoviedb.org/3/movie/popular";
 }
