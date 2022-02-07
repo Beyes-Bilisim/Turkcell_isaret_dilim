@@ -5,6 +5,7 @@ import 'package:movie_manager/models/Movie.dart';
 import 'package:movie_manager/pages/Details.dart';
 import 'package:movie_manager/pages/DetailsWithoutImage.dart';
 import 'package:movie_manager/pages/Login.dart';
+import 'package:movie_manager/utils/Debouncer.dart';
 import 'package:movie_manager/utils/texts/Texts.dart';
 
 class SearchPage extends StatefulWidget {
@@ -87,7 +88,7 @@ class _SearchState extends State<Search> {
   TextEditingController _search = TextEditingController();
   List<Movie> movies = [];
   String query = '';
-
+  final _debouncer = Debouncer(milliseconds: 500);
   @override
   void initState() {
     // TODO: implement initState
@@ -140,19 +141,22 @@ class _SearchState extends State<Search> {
               hintStyle: style,
               border: InputBorder.none,
             ),
-            onChanged: (text) async {
-              var textControl = text.replaceAll(' ', '');
-              if (textControl == '') {
-                init();
-              }
-              setState(() {
-                _load = true;
-              });
-              var gelenMovies = await api.getMovies(text);
-              setState(() {
-                query = text;
-                movies = gelenMovies;
-                _load = false;
+            onChanged: (text) {
+              _debouncer.run(() async {
+                var textControl = text.replaceAll(' ', '');
+                if (textControl == '') {
+                  init();
+                } else {
+                  setState(() {
+                    _load = true;
+                  });
+                  var gelenMovies = await api.getMovies(text);
+                  setState(() {
+                    query = text;
+                    movies = gelenMovies;
+                    _load = false;
+                  });
+                }
               });
             },
           ),
