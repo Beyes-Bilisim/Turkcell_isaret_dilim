@@ -107,6 +107,13 @@ class _SearchState extends State<Search> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _search.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final styleActive = TextStyle(color: Colors.black);
     final styleHint = TextStyle(color: Colors.black54);

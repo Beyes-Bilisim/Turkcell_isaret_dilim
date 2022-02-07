@@ -50,6 +50,7 @@ class MovieApi {
       }
       return movies;
     } catch (e) {
+      // Hatalar için ayrı widget yazılacaktır.
       print(e);
       return [];
     }

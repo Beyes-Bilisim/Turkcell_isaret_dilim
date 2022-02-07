@@ -193,14 +193,13 @@ class _LoginState extends State<Login> {
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else {
             showAlertDialog(context);
-            Timer(Duration(seconds: 2), () {
-              formKey.currentState!.reset();
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                    (r) => false);
-              });
+
+            formKey.currentState!.reset();
+            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                  (r) => false);
             });
           }
         });
