@@ -24,17 +24,17 @@ class Movie {
     required this.voteAverage,
   });
 
-  String backdropPath;
-  String homepage;
-  int id;
-  String imdbId;
-  String originalLanguage;
-  String originalTitle;
-  String overview;
-  String posterPath;
-  String releaseDate;
-  String tagline;
-  String title;
+  String? backdropPath;
+  String? homepage;
+  int? id;
+  String? imdbId;
+  String? originalLanguage;
+  String? originalTitle;
+  String? overview;
+  String? posterPath;
+  String? releaseDate;
+  String? tagline;
+  String? title;
   var voteAverage;
 
   factory Movie.fromJson(Map<String, dynamic> json) => Movie(

@@ -168,7 +168,7 @@ class _SearchState extends State<Search> {
                       itemCount: movies.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(movies[index].title),
+                          title: Text(movies[index].title ?? "null"),
                           onTap: () {
                             if (movies[index].backdropPath == null &&
                                 movies[index].posterPath == null) {

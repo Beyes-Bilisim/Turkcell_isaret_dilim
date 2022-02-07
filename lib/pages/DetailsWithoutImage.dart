@@ -23,7 +23,7 @@ class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
   Widget build(BuildContext context) {
     var tarih;
     try {
-      tarih = this.widget.movie.releaseDate.split("-")[0];
+      tarih = this.widget.movie.releaseDate!.split("-")[0];
     } catch (e) {
       tarih = "null";
     }
@@ -61,11 +61,11 @@ class _DetailsWithOutImageState extends State<DetailsWithOutImage> {
           height: 150,
         ),
         Center(
-            child: Text(widget.movie.title + " (${tarih})",
+            child: Text(widget.movie.title! + " (${tarih})",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
         Padding(
             padding: EdgeInsets.all(20),
-            child: Text(widget.movie.overview, style: TextStyle(fontSize: 18)))
+            child: Text(widget.movie.overview!, style: TextStyle(fontSize: 18)))
       ])),
     );
   }

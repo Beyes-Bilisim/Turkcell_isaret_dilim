@@ -24,7 +24,7 @@ class _DetailsState extends State<Details> {
   Widget build(BuildContext context) {
     var tarih;
     try {
-      tarih = this.widget.movie.releaseDate.split("-")[0];
+      tarih = this.widget.movie.releaseDate!.split("-")[0];
     } catch (e) {
       tarih = "null";
     }
@@ -66,10 +66,10 @@ class _DetailsState extends State<Details> {
               child: Stack(children: [
                 (widget.movie.backdropPath != null)
                     ? Image.network(Api.imageUrl +
-                        widget.movie.backdropPath)
+                        widget.movie.backdropPath!)
                     : (widget.movie.posterPath != null)
                         ? Image.network(Api.imageUrl +
-                            widget.movie.posterPath)
+                            widget.movie.posterPath!)
                         : Text(""),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,12 +91,12 @@ class _DetailsState extends State<Details> {
                     ]),
               ])),
           Center(
-              child: Text(widget.movie.title + " (${tarih})",
+              child: Text(widget.movie.title! + " (${tarih})",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
           Padding(
               padding: EdgeInsets.all(20),
               child:
-                  Text(widget.movie.overview, style: TextStyle(fontSize: 18)))
+                  Text(widget.movie.overview ?? "null", style: TextStyle(fontSize: 18)))
         ],
       )),
     );
